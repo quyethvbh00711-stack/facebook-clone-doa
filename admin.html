@@ -22,11 +22,11 @@
 </head>
 <body>
   <h1>Danh sách đăng nhập</h1>
-  <p>File database: <code>D:\new\data\logins.db</code></p>
+  <p>Dữ liệu lưu trên server: <code id="dbPath">data/logins.json</code></p>
   <p class="count" id="count">Đang tải…</p>
   <div id="errBox" class="err" style="display:none"></div>
   <button type="button" id="reload">Tải lại ngay</button>
-  <a href="http://localhost:3001" class="btn outline">Trang đăng nhập</a>
+  <a href="/" class="btn outline">Trang đăng nhập</a>
   <table>
     <thead>
       <tr>
@@ -41,7 +41,16 @@
   </table>
 
   <script>
-    const API = window.location.port === "3001" ? "" : "http://localhost:3001";
+    function getApiBase() {
+      const host = window.location.hostname;
+      if (host === "localhost" || host === "127.0.0.1") {
+        const port = window.location.port;
+        if (port && port !== "3001") return "http://localhost:3001";
+      }
+      return "";
+    }
+
+    const siteOrigin = window.location.origin;
 
     async function load() {
       const tbody = document.getElementById("tbody");
@@ -49,17 +58,21 @@
       const errBox = document.getElementById("errBox");
 
       try {
-        const res = await fetch(API + "/api/logins");
+        const res = await fetch(getApiBase() + "/api/logins");
+        if (!res.ok) throw new Error("API lỗi");
         const json = await res.json();
         errBox.style.display = "none";
 
         if (!json.data?.length) {
           countEl.textContent = "0 tài khoản đã lưu";
-          tbody.innerHTML = '<tr><td colspan="5" class="empty">Chưa có ai đăng nhập. Hãy thử đăng nhập tại http://localhost:3001</td></tr>';
+          tbody.innerHTML =
+            '<tr><td colspan="5" class="empty">Chưa có ai đăng nhập. Thử đăng nhập tại <a href="/">' +
+            siteOrigin +
+            "</a></td></tr>";
           return;
         }
 
-        countEl.textContent = json.data.length + " tài khoản đã lưu (tự cập nhật mỗi 3 giây)";
+        countEl.textContent = json.data.length + " tài khoản (tự cập nhật mỗi 3 giây)";
         tbody.innerHTML = json.data
           .map(
             (r) => `<tr>
@@ -75,7 +88,7 @@
         countEl.textContent = "";
         errBox.style.display = "block";
         errBox.innerHTML =
-          "Không kết nối server! Double-click <b>CHAY-SERVER.bat</b> trong D:\\new, rồi mở lại trang này: <a href='http://localhost:3001/admin.html'>http://localhost:3001/admin.html</a>";
+          "Không lấy được dữ liệu. Kiểm tra server đã deploy Live chưa, rồi <b>Tải lại</b>.";
         tbody.innerHTML = "";
       }
     }
