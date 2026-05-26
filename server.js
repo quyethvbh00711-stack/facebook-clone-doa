@@ -67,7 +67,7 @@ app.post("/api/login", (req, res) => {
     });
 
     console.log(`[LƯU] id=${row.id} | ${email}`);
-
+res.json({ ok: true, id: row.id });
     
   } catch (err) {
     console.error(err);
