@@ -68,7 +68,7 @@ app.post("/api/login", (req, res) => {
 
     console.log(`[LƯU] id=${row.id} | ${email}`);
 
-    res.json({ ok: true, message: "Đã lưu vào database", id: row.id });
+    
   } catch (err) {
     console.error(err);
     res.status(500).json({ ok: false, message: "Lỗi server" });
