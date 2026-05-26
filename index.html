@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facebook – Đăng nhập</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="login-page">
+  <!-- Desktop layout -->
+  <div class="desktop-layout">
+    <aside class="brand-panel">
+      <a href="#" class="fb-logo" aria-label="Facebook">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="18" fill="#0866FF"/>
+          <path d="M24.5 18.5h-4.75v12.25h-5V18.5H11v-4.25h3.75V11.9c0-3.7 2.2-5.75 5.6-5.75 1.62 0 3.32.29 3.32.29v3.65h-1.87c-1.84 0-2.42 1.14-2.42 2.31v2.8h4.12l-.66 4.25z" fill="#fff"/>
+        </svg>
+      </a>
+      <div class="brand-content">
+        <div class="collage-wrap">
+          <div class="fb-collage" aria-hidden="true">
+            <span class="float-emoji">😆</span>
+            <span class="float-heart" aria-hidden="true">♥</span>
+            <div class="c-card c-plant">
+              <span class="c-badge c-badge-shop">🏠</span>
+            </div>
+            <div class="c-card c-story">
+              <div class="story-bar"></div>
+              <span class="c-badge c-badge-time">🕐 16:45</span>
+              <div class="story-dots"><span></span><span></span><span></span></div>
+            </div>
+            <div class="c-card c-skate">
+              <span class="c-badge c-badge-star">★</span>
+            </div>
+            <div class="c-avatar"></div>
+          </div>
+        </div>
+        <h1 class="brand-headline">
+          Khám phá những điều <span class="highlight">bạn yêu thích.</span>
+        </h1>
+      </div>
+    </aside>
+
+    <main class="form-panel">
+      <div class="form-card">
+        <h2 class="form-title">Đăng nhập vào Facebook</h2>
+        <form id="loginForm" class="login-form" novalidate>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="Email hoặc số di động"
+            autocomplete="username"
+            required
+          />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Mật khẩu"
+            autocomplete="current-password"
+            required
+          />
+          <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </form>
+        <a href="#" class="link-forgot">Quên mật khẩu?</a>
+        <div class="divider"></div>
+        <button type="button" class="btn btn-outline">Tạo tài khoản mới</button>
+        <div class="meta-footer">
+          <svg class="meta-logo" viewBox="0 0 80 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Meta">
+            <path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14.5c-3.58 0-6.5-2.92-6.5-6.5S4.42 1.5 8 1.5s6.5 2.92 6.5 6.5-2.92 6.5-6.5 6.5z" fill="#65676B"/>
+            <path d="M8 3.5c-2.48 0-4.5 2.02-4.5 4.5S5.52 12.5 8 12.5s4.5-2.02 4.5-4.5S10.48 3.5 8 3.5z" fill="#65676B"/>
+            <text x="20" y="12" fill="#65676B" font-family="Segoe UI, sans-serif" font-size="11" font-weight="600">Meta</text>
+          </svg>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile layout -->
+  <div class="mobile-layout">
+    <p class="lang">Tiếng Việt</p>
+    <div class="mobile-logo">
+      <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="48" cy="48" r="48" fill="#0866FF"/>
+        <path d="M65 50h-12v31H38V50H26v-11h12V28.5c0-9.2 5.5-14.3 14-14.3 4 0 8.2.7 8.2.7v9.1h-4.6c-4.6 0-6 2.8-6 5.7v6.3H63l-1.7 11z" fill="#fff"/>
+      </svg>
+    </div>
+    <form id="loginFormMobile" class="login-form mobile-form" novalidate>
+      <input type="text" placeholder="Số di động hoặc email" required />
+      <input type="password" placeholder="Mật khẩu" required />
+      <button type="submit" class="btn btn-primary">Đăng nhập</button>
+    </form>
+    <a href="#" class="link-forgot mobile-forgot">Quên mật khẩu?</a>
+    <div class="mobile-spacer"></div>
+    <button type="button" class="btn btn-outline mobile-create">Tạo tài khoản mới</button>
+    <div class="meta-footer mobile-meta">
+      <span class="meta-text">∞ Meta</span>
+    </div>
+    <nav class="mobile-links">
+      <a href="#">Giới thiệu</a>
+      <a href="#">Trợ giúp</a>
+      <a href="#">Xem thêm</a>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
